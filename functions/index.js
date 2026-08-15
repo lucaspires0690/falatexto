@@ -2,52 +2,51 @@ const functions = require('firebase-functions');
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
 const axios = require('axios');
-const serviceAccount = require('./service-account.json');
 
 const RUNPOD_API_KEY = defineSecret('RUNPOD_API_KEY');
+const MERCADO_PAGO_ACCESS_TOKEN = defineSecret('MERCADO_PAGO_ACCESS_TOKEN');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  projectId: 'fala-texto-ad013',
-  storageBucket: 'fala-texto-ad013.firebasestorage.app'
+  projectId: 'falatexto-ae67d',
+  storageBucket: 'falatexto-ae67d.firebasestorage.app'
 });
 
 const db = admin.firestore();
 db.settings({ databaseId: 'falatexto-db' });
 
-const MERCADO_PAGO_ACCESS_TOKEN = 'APP_USR-613668285368817-031805-61c19d7a030dfd3f6de6fc400adb8c8b-1061734415';
-
-// ==================== MERCADO PAGO ====================
-exports.mercadopagoWebhook = functions.https.onRequest(async (req, res) => {
-  const t = new Date().toISOString();
-  console.log(`[${t}] WEBHOOK:`, JSON.stringify(req.body));
-  try {
-    const tipo = req.body.type || req.query.topic;
-    if (tipo !== 'payment') return res.send('OK');
-    const paymentId = req.body.data?.id || req.query.id;
-    if (!paymentId) return res.send('OK');
-    const r = await axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}` }
-    });
-    const payment = r.data;
-    if (payment.status === 'approved') {
-      const uid = payment.external_reference;
-      const valor = payment.transaction_amount;
-      const creditos = Math.floor(valor);
-      if (!uid) return res.send('OK');
-      const ref = db.collection('usuarios').doc(uid);
-      const doc = await ref.get();
-      if (!doc.exists) await ref.set({ creditos: 0, email: 'pendente@email.com', createdAt: admin.firestore.Timestamp.now() });
-      await ref.update({ creditos: admin.firestore.FieldValue.increment(creditos), ultimaRecarga: admin.firestore.Timestamp.now() });
-      await db.collection('transacoes').add({ uid, paymentId, valor, creditos, data: admin.firestore.Timestamp.now(), status: 'approved' });
-      console.log(`✅ +${creditos} créditos para ${uid}`);
+exports.mercadopagoWebhook = functions.https.onRequest(
+  { secrets: [MERCADO_PAGO_ACCESS_TOKEN] },
+  async (req, res) => {
+    const t = new Date().toISOString();
+    console.log(`[${t}] WEBHOOK:`, JSON.stringify(req.body));
+    try {
+      const tipo = req.body.type || req.query.topic;
+      if (tipo !== 'payment') return res.send('OK');
+      const paymentId = req.body.data?.id || req.query.id;
+      if (!paymentId) return res.send('OK');
+      const r = await axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+        headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN.value()}` }
+      });
+      const payment = r.data;
+      if (payment.status === 'approved') {
+        const uid = payment.external_reference;
+        const valor = payment.transaction_amount;
+        const creditos = Math.floor(valor);
+        if (!uid) return res.send('OK');
+        const ref = db.collection('usuarios').doc(uid);
+        const doc = await ref.get();
+        if (!doc.exists) await ref.set({ creditos: 0, email: 'pendente@email.com', createdAt: admin.firestore.Timestamp.now() });
+        await ref.update({ creditos: admin.firestore.FieldValue.increment(creditos), ultimaRecarga: admin.firestore.Timestamp.now() });
+        await db.collection('transacoes').add({ uid, paymentId, valor, creditos, data: admin.firestore.Timestamp.now(), status: 'approved' });
+        console.log(`✅ +${creditos} créditos para ${uid}`);
+      }
+      res.send('OK');
+    } catch (e) {
+      console.error('ERRO webhook:', e.message);
+      res.status(500).send('Erro');
     }
-    res.send('OK');
-  } catch (e) {
-    console.error('ERRO webhook:', e.message);
-    res.status(500).send('Erro');
   }
-});
+);
 
 exports.verificarSaldo = functions.https.onCall(async (request) => {
   const uid = request.auth?.uid;
@@ -62,41 +61,50 @@ exports.verificarSaldo = functions.https.onCall(async (request) => {
   return { saldo, suficiente: saldo >= mins, faltam: Math.max(0, mins - saldo) };
 });
 
-exports.criarPagamento = functions.https.onCall(async (request) => {
-  const uid = request.auth?.uid;
-  console.log('💰 criarPagamento chamado por:', uid);
-  if (!uid) throw new functions.https.HttpsError('unauthenticated', 'Não autenticado');
-  const valor = request.data?.valor;
-  if (!valor || valor <= 0) throw new functions.https.HttpsError('invalid-argument', 'Valor inválido');
-  const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
-    items: [{ title: 'Créditos FalaTexto', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
-    external_reference: uid,
-    back_urls: {
-      success: 'https://falatexto.com/app/?pagamento=ok',
-      failure: 'https://falatexto.com/app/?pagamento=erro',
-      pending: 'https://falatexto.com/app/?pagamento=pendente'
-    },
-    auto_return: 'approved'
-  }, { headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`, 'Content-Type': 'application/json' } });
-  return { init_point: r.data.init_point };
-});
-
-exports.criarPagamentoTeste = functions.https.onRequest(async (req, res) => {
-  try {
-    const valor = req.body.valor || 30;
+exports.criarPagamento = functions.https.onCall(
+  { secrets: [MERCADO_PAGO_ACCESS_TOKEN] },
+  async (request) => {
+    const uid = request.auth?.uid;
+    console.log('💰 criarPagamento chamado por:', uid);
+    if (!uid) throw new functions.https.HttpsError('unauthenticated', 'Não autenticado');
+    const valor = request.data?.valor;
+    if (!valor || valor <= 0) throw new functions.https.HttpsError('invalid-argument', 'Valor inválido');
     const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
-      items: [{ title: 'Créditos FalaTexto (TESTE)', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
-      external_reference: 'hqUesQ7WmA0xiZQnQlod',
-      back_urls: { success: 'https://falatexto.com/app/?pagamento=ok', failure: 'https://falatexto.com/app/?pagamento=erro', pending: 'https://falatexto.com/app/?pagamento=pendente' },
+      items: [{ title: 'Créditos FalaTexto', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
+      external_reference: uid,
+      back_urls: {
+        success: 'https://falatexto-ae67d.web.app/app/?pagamento=ok',
+        failure: 'https://falatexto-ae67d.web.app/app/?pagamento=erro',
+        pending: 'https://falatexto-ae67d.web.app/app/?pagamento=pendente'
+      },
       auto_return: 'approved'
-    }, { headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN}`, 'Content-Type': 'application/json' } });
-    res.json({ init_point: r.data.init_point });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
+    }, { headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN.value()}`, 'Content-Type': 'application/json' } });
+    return { init_point: r.data.init_point };
   }
-});
+);
 
-// ==================== CANCELAR JOB ====================
+exports.criarPagamentoTeste = functions.https.onRequest(
+  { secrets: [MERCADO_PAGO_ACCESS_TOKEN] },
+  async (req, res) => {
+    try {
+      const valor = req.body.valor || 30;
+      const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
+        items: [{ title: 'Créditos FalaTexto (TESTE)', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
+        external_reference: 'hqUesQ7WmA0xiZQnQlod',
+        back_urls: {
+          success: 'https://falatexto-ae67d.web.app/app/?pagamento=ok',
+          failure: 'https://falatexto-ae67d.web.app/app/?pagamento=erro',
+          pending: 'https://falatexto-ae67d.web.app/app/?pagamento=pendente'
+        },
+        auto_return: 'approved'
+      }, { headers: { 'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN.value()}`, 'Content-Type': 'application/json' } });
+      res.json({ init_point: r.data.init_point });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 exports.cancelarJob = functions.https.onCall(
   { secrets: [RUNPOD_API_KEY] },
   async (request) => {
@@ -106,7 +114,7 @@ exports.cancelarJob = functions.https.onCall(
     const jobId = request.data?.jobId;
     if (!jobId) throw new functions.https.HttpsError('invalid-argument', 'jobId é obrigatório');
 
-    const RUNPOD_ENDPOINT_ID = 'd533697c8uwww0';  // ✅ NOVO ENDPOINT ID
+    const RUNPOD_ENDPOINT_ID = 'd533697c8uwww0';
     const apiKey = RUNPOD_API_KEY.value();
 
     try {
@@ -138,7 +146,6 @@ exports.cancelarJob = functions.https.onCall(
   }
 );
 
-// ==================== PROCESSAR ÁUDIO ====================
 exports.processarAudio = functions.https.onCall(
   { secrets: [RUNPOD_API_KEY], timeoutSeconds: 540, memory: '256MiB' },
   async (request) => {
@@ -164,10 +171,9 @@ exports.processarAudio = functions.https.onCall(
       const [url] = await file.getSignedUrl({ action: 'read', expires: Date.now() + 3600000 });
 
       const apiKey = RUNPOD_API_KEY.value();
-      const RUNPOD_ENDPOINT_ID = 'd533697c8uwww0';  // ✅ NOVO ENDPOINT ID
+      const RUNPOD_ENDPOINT_ID = 'd533697c8uwww0';
       const runpodUrl = `https://api.runpod.ai/v2/${RUNPOD_ENDPOINT_ID}/run`;
       console.log('🚀 Chamando RunPod:', runpodUrl);
-      console.log('🔑 API Key (primeiros 10):', apiKey.substring(0, 10));
 
       const runpodResp = await axios.post(
         runpodUrl,

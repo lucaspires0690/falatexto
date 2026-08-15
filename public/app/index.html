@@ -489,7 +489,10 @@ document.querySelectorAll('.mplan-btn').forEach(btn => {
       const criarPagamento = httpsCallable(fns, 'criarPagamento');
       const result = await criarPagamento({ valor: Number(btn.dataset.valor) });
       console.log('✅ Resultado:', result.data);
-      location.href = result.data.init_point;
+      window.open(result.data.init_point, '_blank');
+      toast('Pagamento aberto em nova aba. Seus creditos aparecem aqui automaticamente apos a confirmacao.', 'verde');
+      btn.textContent = 'Comprar';
+      btn.disabled = false;
     } catch(e) {
       console.error('❌ Erro:', e.code, e.message);
       btn.textContent = 'Comprar';
