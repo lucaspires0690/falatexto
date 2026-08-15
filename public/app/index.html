@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -363,28 +363,28 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
     <div class="modal-plans">
       <div class="mplan">
         <div class="mplan-nome">Básico</div><div class="mplan-preco">R$ 30</div><div class="mplan-cr">30 créditos</div><div class="mplan-bonus">&nbsp;</div>
-        <button class="mplan-btn" data-valor="30">Comprar</button>
-        <button class="mplan-pix-btn" data-valor="30">⚡ Pix instantâneo</button>
+        <button class="mplan-btn" data-valor="30">Cartao</button>
+        <button class="mplan-pix-btn" data-valor="30">Pix</button>
       </div>
       <div class="mplan dest">
         <div class="mplan-nome">Recomendado</div><div class="mplan-preco">R$ 80</div><div class="mplan-cr">100 créditos</div><div class="mplan-bonus">+25% bônus</div>
-        <button class="mplan-btn" data-valor="80">Comprar</button>
-        <button class="mplan-pix-btn" data-valor="80">⚡ Pix instantâneo</button>
+        <button class="mplan-btn" data-valor="80">Cartao</button>
+        <button class="mplan-pix-btn" data-valor="80">Pix</button>
       </div>
       <div class="mplan">
         <div class="mplan-nome">Profissional</div><div class="mplan-preco">R$ 150</div><div class="mplan-cr">220 créditos</div><div class="mplan-bonus">+47% bônus</div>
-        <button class="mplan-btn" data-valor="150">Comprar</button>
-        <button class="mplan-pix-btn" data-valor="150">⚡ Pix instantâneo</button>
+        <button class="mplan-btn" data-valor="150">Cartao</button>
+        <button class="mplan-pix-btn" data-valor="150">Pix</button>
       </div>
       <div class="mplan">
         <div class="mplan-nome">Premium</div><div class="mplan-preco">R$ 300</div><div class="mplan-cr">450 créditos</div><div class="mplan-bonus">+50% bônus</div>
-        <button class="mplan-btn" data-valor="300">Comprar</button>
-        <button class="mplan-pix-btn" data-valor="300">⚡ Pix instantâneo</button>
+        <button class="mplan-btn" data-valor="300">Cartao</button>
+        <button class="mplan-pix-btn" data-valor="300">Pix</button>
       </div>
       <div class="mplan" style="grid-column:1/-1">
         <div class="mplan-nome">Empresarial</div><div class="mplan-preco">R$ 2.500</div><div class="mplan-cr">4.000 créditos</div><div class="mplan-bonus">+60% bônus</div>
-        <button class="mplan-btn" data-valor="2500">Comprar</button>
-        <button class="mplan-pix-btn" data-valor="2500">⚡ Pix instantâneo</button>
+        <button class="mplan-btn" data-valor="2500">Cartao</button>
+        <button class="mplan-pix-btn" data-valor="2500">Pix</button>
       </div>
     </div>
   </div>
@@ -541,11 +541,11 @@ document.querySelectorAll('.mplan-btn').forEach(btn => {
       const result = await criarPagamento({ valor: Number(btn.dataset.valor) });
       window.open(result.data.init_point, '_blank');
       toast('Pagamento aberto em nova aba. Seus creditos aparecem aqui automaticamente apos a confirmacao.', 'verde');
-      btn.textContent = 'Comprar';
+      btn.textContent = 'Cartao';
       btn.disabled = false;
     } catch(e) {
       console.error('❌ Erro:', e.code, e.message);
-      btn.textContent = 'Comprar';
+      btn.textContent = 'Cartao';
       btn.disabled = false;
       toast('❌ Erro ao iniciar pagamento: ' + e.message, 'erro');
     }
@@ -605,11 +605,11 @@ async function pagarComPix(valor, btn) {
       }
     });
 
-    btn.textContent = '⚡ Pix instantâneo';
+    btn.textContent = 'Pix';
     btn.disabled = false;
   } catch(e) {
     console.error('❌ Erro Pix:', e.code, e.message);
-    btn.textContent = '⚡ Pix instantâneo';
+    btn.textContent = 'Pix';
     btn.disabled = false;
     toast('❌ Erro ao gerar Pix: ' + e.message, 'erro');
   }
