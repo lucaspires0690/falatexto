@@ -35,5 +35,9 @@
       ],
       "source": "functions"
     }
-  ]
+  ],
+  "firestore": {
+    "database": "falatexto-db",
+    "rules": "firestore.rules"
+  }
 }
