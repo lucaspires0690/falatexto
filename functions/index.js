@@ -29,9 +29,10 @@ exports.mercadopagoWebhook = functions.https.onRequest(
       });
       const payment = r.data;
       if (payment.status === 'approved') {
-        const uid = payment.external_reference;
+        const externalRef = payment.external_reference || '';
+        const [uid, creditosStr] = externalRef.split(':');
         const valor = payment.transaction_amount;
-        const creditos = Math.floor(valor);
+        const creditos = parseInt(creditosStr, 10) || Math.floor(valor);
         if (!uid) return res.send('OK');
         const ref = db.collection('usuarios').doc(uid);
         const doc = await ref.get();
@@ -68,10 +69,12 @@ exports.criarPagamento = functions.https.onCall(
     console.log('💰 criarPagamento chamado por:', uid);
     if (!uid) throw new functions.https.HttpsError('unauthenticated', 'Não autenticado');
     const valor = request.data?.valor;
+    const creditosPlano = request.data?.creditos;
     if (!valor || valor <= 0) throw new functions.https.HttpsError('invalid-argument', 'Valor inválido');
+    if (!creditosPlano || creditosPlano <= 0) throw new functions.https.HttpsError('invalid-argument', 'Créditos inválidos');
     const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
       items: [{ title: 'Créditos FalaTexto', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
-      external_reference: uid,
+      external_reference: `${uid}:${creditosPlano}`,
       back_urls: {
         success: 'https://falatexto-ae67d.web.app/app/?pagamento=ok',
         failure: 'https://falatexto-ae67d.web.app/app/?pagamento=erro',
@@ -89,7 +92,9 @@ exports.criarPagamentoPix = functions.https.onCall(
     const uid = request.auth?.uid;
     if (!uid) throw new functions.https.HttpsError('unauthenticated', 'Não autenticado');
     const valor = request.data?.valor;
+    const creditosPlano = request.data?.creditos;
     if (!valor || valor <= 0) throw new functions.https.HttpsError('invalid-argument', 'Valor inválido');
+    if (!creditosPlano || creditosPlano <= 0) throw new functions.https.HttpsError('invalid-argument', 'Créditos inválidos');
     const email = request.auth.token?.email || 'sememail@falatexto.com';
 
     try {
@@ -98,7 +103,7 @@ exports.criarPagamentoPix = functions.https.onCall(
         description: 'Créditos FalaTexto',
         payment_method_id: 'pix',
         payer: { email },
-        external_reference: uid
+        external_reference: `${uid}:${creditosPlano}`
       }, {
         headers: {
           'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN.value()}`,

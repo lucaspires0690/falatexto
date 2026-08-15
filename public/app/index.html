@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -165,14 +165,13 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
 /* ── MODAL ── */
 #modal-creditos{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 #modal-creditos.open{display:flex}
-.modal-card{background:#0D1220;border:1px solid rgba(107,33,168,.3);border-radius:20px;padding:2rem;max-width:600px;width:100%;position:relative;animation:slideIn .3s ease}
+.modal-card{background:#0D1220;border:1px solid rgba(107,33,168,.3);border-radius:20px;padding:2rem;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;position:relative;animation:slideIn .3s ease}
 .modal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violeta),var(--dourado))}
 .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:none;color:var(--cinza);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .modal-close:hover{background:rgba(255,255,255,.14);color:var(--branco)}
 .modal-card h2{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--branco);margin-bottom:.4rem}
 .modal-card p{font-size:var(--fs-xs);color:var(--cinza);margin-bottom:1.5rem}
-.modal-plans{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
-@media(max-width:500px){.modal-plans{grid-template-columns:1fr}}
+.modal-plans{display:flex;flex-direction:column;gap:.8rem}
 .mplan{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
 .mplan:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.04);transform:translateY(-2px)}
 .mplan.dest{border-color:var(--dourado);position:relative}
@@ -181,15 +180,13 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
 .mplan-preco{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--branco);line-height:1;margin-bottom:.2rem}
 .mplan-cr{font-size:.8rem;color:var(--cinza);margin-bottom:.2rem}
 .mplan-bonus{font-size:.78rem;color:var(--dourado);font-weight:600;min-height:1em;margin-bottom:.9rem}
-.mplan-btn{width:100%;padding:.75rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,#F0A500,#FFD447);color:#1a1400;font-family:'Raleway',sans-serif;transition:all .25s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;gap:.4rem;box-shadow:0 2px 10px rgba(240,165,0,.4)}
-.mplan-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(240,165,0,.6)}
-.mplan-btn:active{transform:translateY(0) scale(.96)}
-.mplan-pix-btn{width:100%;padding:.75rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,#00A868,#00C853);color:#fff;font-family:'Raleway',sans-serif;transition:all .25s cubic-bezier(.4,0,.2,1);margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.4rem;box-shadow:0 2px 10px rgba(0,168,104,.4);position:relative;overflow:hidden}
-.mplan-pix-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,168,104,.6)}
-.mplan-pix-btn:active{transform:translateY(0) scale(.96)}
-.mplan-pix-btn::after{content:'';position:absolute;top:0;left:-60%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);animation:pixShine 2.8s infinite}
-.btn-icon{width:16px;height:16px;flex-shrink:0}
-@keyframes pixShine{0%{left:-60%}100%{left:130%}}
+.mplan-btn{width:100%;padding:.65rem;border-radius:8px;font-size:var(--fs-xs);font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:var(--branco);font-family:'Raleway',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.mplan-btn:hover{background:rgba(255,255,255,.14)}
+.mplan.dest .mplan-btn{background:linear-gradient(135deg,var(--dourado),var(--ambar));color:var(--base);border:none}
+.mplan-pix-btn{width:100%;padding:.65rem;border-radius:8px;font-size:var(--fs-xs);font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,var(--verde),var(--verde-dark));color:#fff;font-family:'Raleway',sans-serif;transition:all .2s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.mplan-pix-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(46,204,113,.35)}
+.mplan-pix-btn:active{transform:translateY(0)}
+.btn-icon{width:15px;height:15px;flex-shrink:0}
 
 /* ── MODAL PIX ── */
 #modal-pix{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:250;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
@@ -363,32 +360,22 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
   <div class="modal-card">
     <button class="modal-close" id="modal-close">✕</button>
     <h2>💎 Recarregar créditos</h2>
-    <p>1 crédito = 1 minuto de áudio. Créditos nunca expiram. Escolha "Comprar" para pagar com cartão, ou "Pix instantâneo" para pagar via Pix sem sair da página.</p>
+    <p>Escolha "Comprar com Cartão" para pagar com cartão, ou "Pagar com Pix" para pagar via Pix sem sair da página.</p>
     <div class="modal-plans">
       <div class="mplan">
-        <div class="mplan-nome">Básico</div><div class="mplan-preco">R$ 30</div><div class="mplan-cr">30 créditos</div><div class="mplan-bonus">&nbsp;</div>
-        <button class="mplan-btn" data-valor="30"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cartão</button>
-        <button class="mplan-pix-btn" data-valor="30"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pix</button>
+        <div class="mplan-nome">Pacote de Teste</div><div class="mplan-preco">R$ 19,90</div><div class="mplan-cr">30 minutos</div><div class="mplan-bonus">&nbsp;</div>
+        <button class="mplan-btn" data-valor="19.90" data-creditos="30"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Comprar com Cartão</button>
+        <button class="mplan-pix-btn" data-valor="19.90" data-creditos="30"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pagar com Pix</button>
       </div>
       <div class="mplan dest">
-        <div class="mplan-nome">Recomendado</div><div class="mplan-preco">R$ 80</div><div class="mplan-cr">100 créditos</div><div class="mplan-bonus">+25% bônus</div>
-        <button class="mplan-btn" data-valor="80"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cartão</button>
-        <button class="mplan-pix-btn" data-valor="80"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pix</button>
+        <div class="mplan-nome">Pacote Principal</div><div class="mplan-preco">R$ 47,00</div><div class="mplan-cr">120 minutos</div><div class="mplan-bonus">Mais escolhido</div>
+        <button class="mplan-btn" data-valor="47.00" data-creditos="120"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Comprar com Cartão</button>
+        <button class="mplan-pix-btn" data-valor="47.00" data-creditos="120"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pagar com Pix</button>
       </div>
       <div class="mplan">
-        <div class="mplan-nome">Profissional</div><div class="mplan-preco">R$ 150</div><div class="mplan-cr">220 créditos</div><div class="mplan-bonus">+47% bônus</div>
-        <button class="mplan-btn" data-valor="150"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cartão</button>
-        <button class="mplan-pix-btn" data-valor="150"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pix</button>
-      </div>
-      <div class="mplan">
-        <div class="mplan-nome">Premium</div><div class="mplan-preco">R$ 300</div><div class="mplan-cr">450 créditos</div><div class="mplan-bonus">+50% bônus</div>
-        <button class="mplan-btn" data-valor="300"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cartão</button>
-        <button class="mplan-pix-btn" data-valor="300"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pix</button>
-      </div>
-      <div class="mplan" style="grid-column:1/-1">
-        <div class="mplan-nome">Empresarial</div><div class="mplan-preco">R$ 2.500</div><div class="mplan-cr">4.000 créditos</div><div class="mplan-bonus">+60% bônus</div>
-        <button class="mplan-btn" data-valor="2500"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cartão</button>
-        <button class="mplan-pix-btn" data-valor="2500"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pix</button>
+        <div class="mplan-nome">Pacote Avançado</div><div class="mplan-preco">R$ 97,00</div><div class="mplan-cr">300 minutos</div><div class="mplan-bonus">&nbsp;</div>
+        <button class="mplan-btn" data-valor="97.00" data-creditos="300"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Comprar com Cartão</button>
+        <button class="mplan-pix-btn" data-valor="97.00" data-creditos="300"><svg viewBox="0 0 24 24" class="btn-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10l-3.5-3.5M17 17H7l3.5 3.5"/></svg>Pagar com Pix</button>
       </div>
     </div>
   </div>
@@ -542,14 +529,14 @@ document.querySelectorAll('.mplan-btn').forEach(btn => {
       btn.disabled = true;
       await usuario.getIdToken(true);
       const criarPagamento = httpsCallable(fns, 'criarPagamento');
-      const result = await criarPagamento({ valor: Number(btn.dataset.valor) });
+      const result = await criarPagamento({ valor: Number(btn.dataset.valor), creditos: Number(btn.dataset.creditos) });
       window.open(result.data.init_point, '_blank');
       toast('Pagamento aberto em nova aba. Seus creditos aparecem aqui automaticamente apos a confirmacao.', 'verde');
-      btn.textContent = 'Cartao';
+      btn.textContent = 'Comprar';
       btn.disabled = false;
     } catch(e) {
       console.error('❌ Erro:', e.code, e.message);
-      btn.textContent = 'Cartao';
+      btn.textContent = 'Comprar';
       btn.disabled = false;
       toast('❌ Erro ao iniciar pagamento: ' + e.message, 'erro');
     }
@@ -575,14 +562,14 @@ document.getElementById('pix-copy-btn').onclick = () => {
   toast('Codigo Pix copiado!', 'verde');
 };
 
-async function pagarComPix(valor, btn) {
+async function pagarComPix(valor, creditosPlano, btn) {
   if (!usuario) { toast('❌ Faça login antes de comprar.', 'erro'); return; }
   try {
     btn.textContent = 'Gerando...';
     btn.disabled = true;
     await usuario.getIdToken(true);
     const criarPagamentoPix = httpsCallable(fns, 'criarPagamentoPix');
-    const result = await criarPagamentoPix({ valor });
+    const result = await criarPagamentoPix({ valor, creditos: creditosPlano });
     const { paymentId, qrCode, qrCodeBase64 } = result.data;
 
     document.getElementById('pix-valor-label').textContent = 'Valor: R$ ' + valor;
@@ -609,18 +596,18 @@ async function pagarComPix(valor, btn) {
       }
     });
 
-    btn.textContent = 'Pix';
+    btn.textContent = '⚡ Pix instantâneo';
     btn.disabled = false;
   } catch(e) {
     console.error('❌ Erro Pix:', e.code, e.message);
-    btn.textContent = 'Pix';
+    btn.textContent = '⚡ Pix instantâneo';
     btn.disabled = false;
     toast('❌ Erro ao gerar Pix: ' + e.message, 'erro');
   }
 }
 
 document.querySelectorAll('.mplan-pix-btn').forEach(btn => {
-  btn.onclick = () => pagarComPix(Number(btn.dataset.valor), btn);
+  btn.onclick = () => pagarComPix(Number(btn.dataset.valor), Number(btn.dataset.creditos), btn);
 });
 
 // ── UPLOAD ──
