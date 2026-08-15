@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -433,8 +433,13 @@ onAuthStateChanged(auth, async user => {
   carregarHistorico(user.uid);
 
   if (new URLSearchParams(window.location.search).get('pagamento') === 'ok') {
-    toast('✅ Pagamento confirmado! Créditos adicionados.', 'verde');
-    history.replaceState({}, '', '/app/');
+    if (window.opener) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#2ECC71;font-size:1.3rem;text-align:center;padding:2rem">Pagamento aprovado! Voltando para o FalaTexto...</div>';
+      setTimeout(function(){ window.close(); }, 1800);
+    } else {
+      toast('Pagamento confirmado! Creditos adicionados.', 'verde');
+      history.replaceState({}, '', '/app/');
+    }
   }
 });
 
