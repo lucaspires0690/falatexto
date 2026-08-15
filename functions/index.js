@@ -75,6 +75,10 @@ exports.criarPagamento = functions.https.onCall(
     const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
       items: [{ title: 'Créditos FalaTexto', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
       external_reference: `${uid}:${creditosPlano}`,
+      payment_methods: {
+        excluded_payment_methods: [{ id: 'pix' }],
+        excluded_payment_types: [{ id: 'ticket' }]
+      },
       back_urls: {
         success: 'https://falatexto-ae67d.web.app/app/?pagamento=ok',
         failure: 'https://falatexto-ae67d.web.app/app/?pagamento=erro',
@@ -134,6 +138,10 @@ exports.criarPagamentoTeste = functions.https.onRequest(
       const r = await axios.post('https://api.mercadopago.com/checkout/preferences', {
         items: [{ title: 'Créditos FalaTexto (TESTE)', quantity: 1, unit_price: valor, currency_id: 'BRL' }],
         external_reference: 'hqUesQ7WmA0xiZQnQlod',
+        payment_methods: {
+          excluded_payment_methods: [{ id: 'pix' }],
+          excluded_payment_types: [{ id: 'ticket' }]
+        },
         back_urls: {
           success: 'https://falatexto-ae67d.web.app/app/?pagamento=ok',
           failure: 'https://falatexto-ae67d.web.app/app/?pagamento=erro',
