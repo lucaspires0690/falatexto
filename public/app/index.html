@@ -165,13 +165,14 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
 /* ── MODAL ── */
 #modal-creditos{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 #modal-creditos.open{display:flex}
-.modal-card{background:#0D1220;border:1px solid rgba(107,33,168,.3);border-radius:20px;padding:2rem;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;position:relative;animation:slideIn .3s ease}
+.modal-card{background:#0D1220;border:1px solid rgba(107,33,168,.3);border-radius:20px;padding:2rem;max-width:900px;width:100%;max-height:85vh;overflow-y:auto;position:relative;animation:slideIn .3s ease}
 .modal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violeta),var(--dourado))}
 .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:none;color:var(--cinza);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .modal-close:hover{background:rgba(255,255,255,.14);color:var(--branco)}
 .modal-card h2{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--branco);margin-bottom:.4rem}
 .modal-card p{font-size:var(--fs-xs);color:var(--cinza);margin-bottom:1.5rem}
-.modal-plans{display:flex;flex-direction:column;gap:.8rem}
+.modal-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+@media(max-width:760px){.modal-plans{grid-template-columns:1fr}}
 .mplan{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
 .mplan:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.04);transform:translateY(-2px)}
 .mplan.dest{border-color:var(--dourado);position:relative}
