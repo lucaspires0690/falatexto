@@ -583,7 +583,7 @@ async function pagarComPix(valor, creditosPlano, btn) {
     document.getElementById('modal-pix').classList.add('open');
 
     if (unsubPix) unsubPix();
-    const q = query(collection(db, 'transacoes'), where('paymentId', '==', String(paymentId)));
+    const q = query(collection(db, 'transacoes'), where('paymentId', '==', String(paymentId)), where('uid', '==', usuario.uid));
     unsubPix = onSnapshot(q, snap => {
       if (!snap.empty) {
         const st = document.getElementById('pix-status');
