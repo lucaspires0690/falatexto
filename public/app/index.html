@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -184,6 +184,22 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
 .mplan-btn{width:100%;padding:.65rem;border-radius:8px;font-size:var(--fs-xs);font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:var(--branco);font-family:'Raleway',sans-serif;transition:all .2s}
 .mplan-btn:hover{background:rgba(255,255,255,.14)}
 .mplan.dest .mplan-btn{background:linear-gradient(135deg,var(--dourado),var(--ambar));color:var(--base);border:none}
+.mplan-pix-btn{width:100%;padding:.4rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;border:1px dashed rgba(46,204,113,.4);background:none;color:var(--verde);font-family:'Raleway',sans-serif;transition:all .2s;margin-top:.4rem}
+.mplan-pix-btn:hover{background:rgba(46,204,113,.08)}
+
+/* ── MODAL PIX ── */
+#modal-pix{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:250;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+#modal-pix.open{display:flex}
+.pix-card{background:#0D1220;border:1px solid rgba(46,204,113,.3);border-radius:20px;padding:2rem;max-width:380px;width:100%;position:relative;text-align:center;animation:slideIn .3s ease}
+.pix-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--verde),var(--dourado))}
+.pix-card h2{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--branco);margin-bottom:.3rem}
+.pix-valor{font-size:var(--fs-sm);color:var(--dourado);font-weight:700;margin-bottom:1rem}
+.pix-qr-img{width:220px;height:220px;margin:0 auto 1rem;display:block;border-radius:12px;background:#fff;padding:8px}
+.pix-code-box{width:100%;height:70px;font-size:.68rem;background:rgba(255,255,255,.05);color:var(--branco);border:1px solid var(--card-border);border-radius:8px;padding:.5rem;resize:none;font-family:monospace}
+.pix-status{margin-top:1.2rem;font-size:.9rem;color:var(--cinza);display:flex;align-items:center;justify-content:center;gap:.5rem}
+.pix-status.aprovado{color:var(--verde);font-weight:700}
+@keyframes girarSpin{to{transform:rotate(360deg)}}
+.pix-spinner{display:inline-block;animation:girarSpin 1.2s linear infinite}
 
 /* ── TOAST ── */
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1a2535;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.75rem 1.4rem;font-size:var(--fs-xs);color:var(--branco);z-index:300;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;gap:.6rem;box-shadow:0 8px 30px rgba(0,0,0,.4)}
@@ -338,19 +354,53 @@ main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;
   </div>
 </main>
 
-<!-- MODAL -->
+<!-- MODAL PLANOS -->
 <div id="modal-creditos">
   <div class="modal-card">
     <button class="modal-close" id="modal-close">✕</button>
     <h2>💎 Recarregar créditos</h2>
-    <p>1 crédito = 1 minuto de áudio. Créditos nunca expiram.</p>
+    <p>1 crédito = 1 minuto de áudio. Créditos nunca expiram. Escolha "Comprar" para pagar com cartão, ou "Pix instantâneo" para pagar via Pix sem sair da página.</p>
     <div class="modal-plans">
-      <div class="mplan"><div class="mplan-nome">Básico</div><div class="mplan-preco">R$ 30</div><div class="mplan-cr">30 créditos</div><div class="mplan-bonus">&nbsp;</div><button class="mplan-btn" data-valor="30">Comprar</button></div>
-      <div class="mplan dest"><div class="mplan-nome">Recomendado</div><div class="mplan-preco">R$ 80</div><div class="mplan-cr">100 créditos</div><div class="mplan-bonus">+25% bônus</div><button class="mplan-btn" data-valor="80">Comprar</button></div>
-      <div class="mplan"><div class="mplan-nome">Profissional</div><div class="mplan-preco">R$ 150</div><div class="mplan-cr">220 créditos</div><div class="mplan-bonus">+47% bônus</div><button class="mplan-btn" data-valor="150">Comprar</button></div>
-      <div class="mplan"><div class="mplan-nome">Premium</div><div class="mplan-preco">R$ 300</div><div class="mplan-cr">450 créditos</div><div class="mplan-bonus">+50% bônus</div><button class="mplan-btn" data-valor="300">Comprar</button></div>
-      <div class="mplan" style="grid-column:1/-1"><div class="mplan-nome">Empresarial</div><div class="mplan-preco">R$ 2.500</div><div class="mplan-cr">4.000 créditos</div><div class="mplan-bonus">+60% bônus</div><button class="mplan-btn" data-valor="2500">Comprar</button></div>
+      <div class="mplan">
+        <div class="mplan-nome">Básico</div><div class="mplan-preco">R$ 30</div><div class="mplan-cr">30 créditos</div><div class="mplan-bonus">&nbsp;</div>
+        <button class="mplan-btn" data-valor="30">Comprar</button>
+        <button class="mplan-pix-btn" data-valor="30">⚡ Pix instantâneo</button>
+      </div>
+      <div class="mplan dest">
+        <div class="mplan-nome">Recomendado</div><div class="mplan-preco">R$ 80</div><div class="mplan-cr">100 créditos</div><div class="mplan-bonus">+25% bônus</div>
+        <button class="mplan-btn" data-valor="80">Comprar</button>
+        <button class="mplan-pix-btn" data-valor="80">⚡ Pix instantâneo</button>
+      </div>
+      <div class="mplan">
+        <div class="mplan-nome">Profissional</div><div class="mplan-preco">R$ 150</div><div class="mplan-cr">220 créditos</div><div class="mplan-bonus">+47% bônus</div>
+        <button class="mplan-btn" data-valor="150">Comprar</button>
+        <button class="mplan-pix-btn" data-valor="150">⚡ Pix instantâneo</button>
+      </div>
+      <div class="mplan">
+        <div class="mplan-nome">Premium</div><div class="mplan-preco">R$ 300</div><div class="mplan-cr">450 créditos</div><div class="mplan-bonus">+50% bônus</div>
+        <button class="mplan-btn" data-valor="300">Comprar</button>
+        <button class="mplan-pix-btn" data-valor="300">⚡ Pix instantâneo</button>
+      </div>
+      <div class="mplan" style="grid-column:1/-1">
+        <div class="mplan-nome">Empresarial</div><div class="mplan-preco">R$ 2.500</div><div class="mplan-cr">4.000 créditos</div><div class="mplan-bonus">+60% bônus</div>
+        <button class="mplan-btn" data-valor="2500">Comprar</button>
+        <button class="mplan-pix-btn" data-valor="2500">⚡ Pix instantâneo</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL PIX -->
+<div id="modal-pix">
+  <div class="pix-card">
+    <button class="modal-close" id="pix-close">✕</button>
+    <h2>Pagar com Pix</h2>
+    <div class="pix-valor" id="pix-valor-label"></div>
+    <img class="pix-qr-img" id="pix-qr-img" src="" alt="QR Code Pix">
+    <div style="font-size:.78rem;color:var(--cinza);margin-bottom:.5rem">Ou copie o código:</div>
+    <textarea class="pix-code-box" id="pix-code" readonly></textarea>
+    <button class="btn-nova" id="pix-copy-btn" style="margin-top:.7rem;width:100%">📋 Copiar código Pix</button>
+    <div class="pix-status" id="pix-status"><span class="pix-spinner">⏳</span> Aguardando pagamento...</div>
   </div>
 </div>
 
@@ -381,6 +431,7 @@ let usuario = null;
 let creditos = 0;
 let unsubCreditos = null;
 let unsubJob = null;
+let unsubPix = null;
 
 // ── TOAST ──
 let toastTimer;
@@ -401,7 +452,6 @@ onAuthStateChanged(auth, async user => {
   usuario = user;
   document.getElementById('tela-login').style.display = 'none';
 
-  // Cria documento no Firestore se for primeiro login
   try {
     const userRef = doc(db, 'usuarios', user.uid);
     const userSnap = await getDoc(userRef);
@@ -416,7 +466,6 @@ onAuthStateChanged(auth, async user => {
     }
   } catch(e) { console.error('Erro ao criar usuário:', e); }
 
-  // Avatar
   const av = document.getElementById('user-avatar');
   if (user.photoURL) {
     const img = document.createElement('img');
@@ -470,7 +519,7 @@ function ouvirCreditos(uid) {
   });
 }
 
-// ── MODAL ──
+// ── MODAL PLANOS ──
 function abrirModal() {
   document.getElementById('modal-creditos').classList.add('open');
   document.getElementById('user-dropdown').classList.remove('open');
@@ -487,13 +536,9 @@ document.querySelectorAll('.mplan-btn').forEach(btn => {
     try {
       btn.textContent = 'Aguarde...';
       btn.disabled = true;
-      // Força refresh do token
       await usuario.getIdToken(true);
-      console.log('✅ UID:', usuario.uid);
-      // Usa httpsCallable com a instância correta do app
       const criarPagamento = httpsCallable(fns, 'criarPagamento');
       const result = await criarPagamento({ valor: Number(btn.dataset.valor) });
-      console.log('✅ Resultado:', result.data);
       window.open(result.data.init_point, '_blank');
       toast('Pagamento aberto em nova aba. Seus creditos aparecem aqui automaticamente apos a confirmacao.', 'verde');
       btn.textContent = 'Comprar';
@@ -505,6 +550,73 @@ document.querySelectorAll('.mplan-btn').forEach(btn => {
       toast('❌ Erro ao iniciar pagamento: ' + e.message, 'erro');
     }
   };
+});
+
+// ── MODAL PIX ──
+document.getElementById('pix-close').onclick = () => {
+  document.getElementById('modal-pix').classList.remove('open');
+  if (unsubPix) { unsubPix(); unsubPix = null; }
+};
+document.getElementById('modal-pix').onclick = e => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('open');
+    if (unsubPix) { unsubPix(); unsubPix = null; }
+  }
+};
+document.getElementById('pix-copy-btn').onclick = () => {
+  const el = document.getElementById('pix-code');
+  el.select();
+  el.setSelectionRange(0, 99999);
+  navigator.clipboard?.writeText(el.value).catch(() => document.execCommand('copy'));
+  toast('Codigo Pix copiado!', 'verde');
+};
+
+async function pagarComPix(valor, btn) {
+  if (!usuario) { toast('❌ Faça login antes de comprar.', 'erro'); return; }
+  try {
+    btn.textContent = 'Gerando...';
+    btn.disabled = true;
+    await usuario.getIdToken(true);
+    const criarPagamentoPix = httpsCallable(fns, 'criarPagamentoPix');
+    const result = await criarPagamentoPix({ valor });
+    const { paymentId, qrCode, qrCodeBase64 } = result.data;
+
+    document.getElementById('pix-valor-label').textContent = 'Valor: R$ ' + valor;
+    document.getElementById('pix-qr-img').src = 'data:image/png;base64,' + qrCodeBase64;
+    document.getElementById('pix-code').value = qrCode;
+    document.getElementById('pix-status').className = 'pix-status';
+    document.getElementById('pix-status').innerHTML = '<span class="pix-spinner">⏳</span> Aguardando pagamento...';
+
+    document.getElementById('modal-creditos').classList.remove('open');
+    document.getElementById('modal-pix').classList.add('open');
+
+    if (unsubPix) unsubPix();
+    const q = query(collection(db, 'transacoes'), where('paymentId', '==', String(paymentId)));
+    unsubPix = onSnapshot(q, snap => {
+      if (!snap.empty) {
+        const st = document.getElementById('pix-status');
+        st.className = 'pix-status aprovado';
+        st.innerHTML = '✅ Pagamento aprovado!';
+        setTimeout(() => {
+          document.getElementById('modal-pix').classList.remove('open');
+          toast('Pagamento confirmado! Creditos adicionados.', 'verde');
+          if (unsubPix) { unsubPix(); unsubPix = null; }
+        }, 1500);
+      }
+    });
+
+    btn.textContent = '⚡ Pix instantâneo';
+    btn.disabled = false;
+  } catch(e) {
+    console.error('❌ Erro Pix:', e.code, e.message);
+    btn.textContent = '⚡ Pix instantâneo';
+    btn.disabled = false;
+    toast('❌ Erro ao gerar Pix: ' + e.message, 'erro');
+  }
+}
+
+document.querySelectorAll('.mplan-pix-btn').forEach(btn => {
+  btn.onclick = () => pagarComPix(Number(btn.dataset.valor), btn);
 });
 
 // ── UPLOAD ──
@@ -540,13 +652,11 @@ async function processarArquivo(file) {
     });
     await task;
 
-    // Upload concluído — mostrar botão Transcrever
     document.getElementById('card-processamento').style.display = 'none';
     document.getElementById('pronto-filename').textContent = file.name;
     document.getElementById('pronto-mins').textContent = mins;
     document.getElementById('card-pronto').style.display = 'block';
 
-    // Botão Transcrever
     document.getElementById('btn-transcrever').onclick = async () => {
       document.getElementById('card-pronto').style.display = 'none';
       document.getElementById('card-processamento').style.display = 'block';
@@ -563,7 +673,6 @@ async function processarArquivo(file) {
       }
     };
 
-    // Botão Cancelar
     document.getElementById('btn-cancelar-pronto').onclick = () => {
       document.getElementById('card-pronto').style.display = 'none';
       document.getElementById('secao-upload').style.display = 'block';
@@ -586,7 +695,6 @@ function ouvirJob(jobId) {
     else if (d.status === 'erro') { unsubJob(); toast('❌ Erro. Créditos estornados.', 'erro'); resetar(); }
   });
 
-  // Botão cancelar
   const btnCancelar = document.getElementById('btn-cancelar-proc');
   btnCancelar.onclick = async () => {
     if (!confirm('Tem certeza que deseja cancelar? O processamento será interrompido e os créditos não serão cobrados.')) return;
@@ -594,9 +702,8 @@ function ouvirJob(jobId) {
     btnCancelar.disabled = true;
     if (unsubJob) { unsubJob(); unsubJob = null; }
     try {
-      // Tenta cancelar o job no RunPod via Cloud Function
       const cancelarFn = httpsCallable(fns, 'cancelarJob');
-      await cancelarFn({ jobId }).catch(() => {}); // ignora erro se função não existir
+      await cancelarFn({ jobId }).catch(() => {});
     } catch(e) { /* silencioso */ }
     toast('🛑 Transcrição cancelada.', '');
     resetar();

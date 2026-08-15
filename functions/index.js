@@ -83,6 +83,44 @@ exports.criarPagamento = functions.https.onCall(
   }
 );
 
+exports.criarPagamentoPix = functions.https.onCall(
+  { secrets: [MERCADO_PAGO_ACCESS_TOKEN] },
+  async (request) => {
+    const uid = request.auth?.uid;
+    if (!uid) throw new functions.https.HttpsError('unauthenticated', 'Não autenticado');
+    const valor = request.data?.valor;
+    if (!valor || valor <= 0) throw new functions.https.HttpsError('invalid-argument', 'Valor inválido');
+    const email = request.auth.token?.email || 'sememail@falatexto.com';
+
+    try {
+      const r = await axios.post('https://api.mercadopago.com/v1/payments', {
+        transaction_amount: valor,
+        description: 'Créditos FalaTexto',
+        payment_method_id: 'pix',
+        payer: { email },
+        external_reference: uid
+      }, {
+        headers: {
+          'Authorization': `Bearer ${MERCADO_PAGO_ACCESS_TOKEN.value()}`,
+          'Content-Type': 'application/json',
+          'X-Idempotency-Key': `${uid}-${Date.now()}`
+        }
+      });
+      const data = r.data;
+      const txData = data.point_of_interaction?.transaction_data;
+      if (!txData?.qr_code) throw new Error('QR Code não retornado pelo Mercado Pago');
+      return {
+        paymentId: String(data.id),
+        qrCode: txData.qr_code,
+        qrCodeBase64: txData.qr_code_base64
+      };
+    } catch (error) {
+      console.error('Erro criarPagamentoPix:', error.response?.data || error.message);
+      throw new functions.https.HttpsError('internal', 'Erro ao gerar Pix: ' + (error.response?.data?.message || error.message));
+    }
+  }
+);
+
 exports.criarPagamentoTeste = functions.https.onRequest(
   { secrets: [MERCADO_PAGO_ACCESS_TOKEN] },
   async (req, res) => {
