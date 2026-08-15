@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FalaTexto — Meu Painel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --violeta:#6B21A8;--indigo:#1E1B4B;--indigo-mid:#312E81;
+  --verde:#2ECC71;--verde-dark:#1A8A4A;
+  --dourado:#C9A84C;--ambar:#F0A500;
+  --azul:#1E3A8A;--branco:#F8F6FF;--cinza:#8B9DB0;--base:#080B14;
+  --card:#0D1220;--card-border:rgba(255,255,255,.07);
+  --fs-xs:.88rem;--fs-sm:1rem;--fs-base:1.05rem;--fs-md:1.15rem;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Raleway',sans-serif;background:var(--base);color:var(--branco);min-height:100vh;overflow-x:hidden;font-size:var(--fs-base);line-height:1.7}
+
+/* ── FUNDO RADIÔNICO ── */
+.bg-radionics{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-turbilhao{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(800px,120vw);height:min(800px,120vw);opacity:0.018;animation:girar 60s linear infinite}
+@keyframes girar{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bg-aura{position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(107,33,168,.08) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+/* ── LOGIN ── */
+#tela-login{position:fixed;inset:0;background:var(--base);display:flex;align-items:center;justify-content:center;z-index:100;flex-direction:column;gap:2rem;padding:2rem}
+.login-card{background:var(--card);border:1px solid rgba(107,33,168,.25);border-radius:20px;padding:3rem 2.5rem;text-align:center;max-width:420px;width:100%;position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violeta),var(--verde),var(--dourado))}
+.login-logo{font-family:'Cinzel',serif;font-size:2rem;font-weight:700;letter-spacing:2px;margin-bottom:1.5rem;display:block}
+.login-logo .fala{color:var(--branco)}
+.login-logo .texto{color:var(--verde);text-shadow:0 0 16px rgba(46,204,113,.35)}
+.login-logo-dot{display:inline-block;width:6px;height:6px;background:var(--dourado);border-radius:50%;margin:0 2px 4px;vertical-align:middle;box-shadow:0 0 8px var(--dourado)}
+.login-card h2{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--branco);margin-bottom:.6rem}
+.login-card p{font-size:var(--fs-sm);color:var(--cinza);margin-bottom:2rem;line-height:1.6}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:.8rem;background:#fff;color:#1f1f1f;border:none;border-radius:10px;padding:.9rem 1.8rem;font-size:var(--fs-sm);font-weight:700;cursor:pointer;width:100%;transition:all .2s;font-family:'Raleway',sans-serif}
+.btn-google:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,.15)}
+.btn-google svg{width:20px;height:20px;flex-shrink:0}
+.login-back{color:var(--cinza);font-size:var(--fs-xs);text-decoration:none;transition:color .2s}
+.login-back:hover{color:var(--branco)}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding:.85rem 1.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(8,11,20,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(107,33,168,.15)}
+.logo{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--branco);text-decoration:none;letter-spacing:2px;font-weight:700}
+.logo .fala{color:var(--branco)}
+.logo .texto{color:var(--verde);text-shadow:0 0 14px rgba(46,204,113,.3)}
+.logo-dot{display:inline-block;width:5px;height:5px;background:var(--dourado);border-radius:50%;margin:0 1px 3px;vertical-align:middle;box-shadow:0 0 6px var(--dourado)}
+.header-right{display:flex;align-items:center;gap:1rem}
+.creditos-container{display:flex;align-items:center;gap:.5rem}
+.creditos-badge{display:flex;align-items:center;gap:.5rem;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);border-radius:8px;padding:.4rem .9rem;font-size:var(--fs-xs);color:var(--dourado);font-weight:700}
+.creditos-badge .cr-num{font-family:'Cinzel',serif;font-size:1rem}
+.creditos-badge .cr-label{color:rgba(201,168,76,.6);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.creditos-low{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08);color:#f87171;animation:pulseLow 2s infinite}
+@keyframes pulseLow{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.3)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+.btn-add-creditos{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.25);border-radius:8px;padding:.4rem .9rem;color:var(--verde);font-size:var(--fs-xs);font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.3rem;font-family:'Raleway',sans-serif}
+.btn-add-creditos:hover{background:rgba(46,204,113,.2);border-color:rgba(46,204,113,.4);transform:translateY(-1px)}
+.user-menu{position:relative}
+.user-avatar{width:34px;height:34px;border-radius:50%;background:var(--indigo-mid);border:2px solid rgba(107,33,168,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--dourado);overflow:hidden;transition:border-color .2s}
+.user-avatar:hover{border-color:var(--dourado)}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-dropdown{position:absolute;top:calc(100% + .6rem);right:0;background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:.5rem;min-width:180px;opacity:0;pointer-events:none;transform:translateY(-6px);transition:all .2s;z-index:100}
+.user-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.user-info{padding:.7rem .8rem .5rem;border-bottom:1px solid var(--card-border);margin-bottom:.3rem}
+.user-name{font-size:var(--fs-xs);font-weight:700;color:var(--branco)}
+.user-email{font-size:.75rem;color:var(--cinza)}
+.dd-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;border-radius:8px;font-size:var(--fs-xs);color:var(--cinza);cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left;font-family:'Raleway',sans-serif}
+.dd-item:hover{background:rgba(255,255,255,.05);color:var(--branco)}
+.dd-item.danger{color:#f87171}
+.dd-item.danger:hover{background:rgba(239,68,68,.08)}
+
+/* ── MAIN ── */
+main{padding:5.5rem 1.5rem 3rem;max-width:900px;margin:0 auto;position:relative;z-index:1}
+
+/* ── UPLOAD ── */
+.upload-title{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3vw,2rem);color:var(--branco);margin-bottom:.4rem}
+.upload-sub{font-size:var(--fs-sm);color:var(--cinza);margin-bottom:1.8rem}
+.upload-zone{border:2px dashed rgba(107,33,168,.35);border-radius:20px;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .3s;position:relative;background:rgba(107,33,168,.04);overflow:hidden}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--verde);background:rgba(46,204,113,.04)}
+.upload-zone.drag{transform:scale(1.01)}
+.upload-zone-icon{font-size:3rem;margin-bottom:1rem;display:block;transition:transform .3s}
+.upload-zone:hover .upload-zone-icon{transform:translateY(-4px) scale(1.1)}
+.upload-zone h3{font-size:var(--fs-md);font-weight:700;color:var(--branco);margin-bottom:.4rem}
+.upload-zone p{font-size:var(--fs-xs);color:var(--cinza)}
+.upload-zone p span{color:var(--verde);font-weight:600}
+.upload-formats{font-size:.8rem;color:rgba(139,157,176,.5);margin-top:.8rem}
+#file-input{display:none}
+.btn-upload-select{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,var(--verde),var(--verde-dark));color:#fff;border:none;border-radius:8px;padding:.7rem 1.6rem;font-size:var(--fs-sm);font-weight:700;cursor:pointer;margin-top:1.2rem;font-family:'Raleway',sans-serif;transition:all .2s}
+.btn-upload-select:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,204,113,.35)}
+
+/* ── PROCESSAMENTO ── */
+#card-processamento{display:none;background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+#card-processamento::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violeta),var(--verde),var(--dourado))}
+.proc-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+.proc-icon{font-size:2rem;flex-shrink:0;animation:procPulse 2s ease-in-out infinite}
+@keyframes procPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.proc-info{flex:1;min-width:0}
+.proc-filename{font-weight:700;color:var(--branco);font-size:var(--fs-sm);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.2rem}
+.proc-status{font-size:var(--fs-xs);color:var(--cinza)}
+.proc-status span{color:var(--verde);font-weight:600}
+.prog-wrap{margin-bottom:1rem}
+.prog-labels{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.prog-pct{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--branco);font-weight:700}
+.prog-tempo{font-size:var(--fs-xs);color:var(--cinza)}
+.prog-bar-bg{height:10px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--violeta),var(--verde));border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1);width:0%;position:relative}
+.prog-bar-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:40px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3));animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.proc-etapas{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1.2rem}
+@media(max-width:600px){.proc-etapas{grid-template-columns:1fr}}
+.etapa{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:.8rem;text-align:center;transition:all .4s}
+.etapa.ativa{border-color:rgba(107,33,168,.4);background:rgba(107,33,168,.08)}
+.etapa.concluida{border-color:rgba(46,204,113,.3);background:rgba(46,204,113,.06)}
+.etapa-icon{font-size:1.3rem;margin-bottom:.3rem;display:block}
+.etapa-nome{font-size:.78rem;color:var(--cinza);font-weight:600}
+.etapa.ativa .etapa-nome{color:var(--branco)}
+.etapa.concluida .etapa-nome{color:var(--verde)}
+
+/* ── BOTÃO CANCELAR PROCESSAMENTO ── */
+.btn-cancelar-proc{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1.2rem;padding:.75rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:10px;color:#f87171;font-size:var(--fs-xs);font-weight:700;cursor:pointer;font-family:'Raleway',sans-serif;transition:all .2s}
+.btn-cancelar-proc:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);transform:translateY(-1px)}
+
+/* ── DOWNLOAD ── */
+#card-download{display:none;background:var(--card);border:1px solid rgba(46,204,113,.2);border-radius:20px;padding:2rem;margin-bottom:2rem;text-align:center;position:relative;overflow:hidden;animation:slideIn .5s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+#card-download::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--verde),var(--dourado))}
+.download-icon{font-size:3.5rem;margin-bottom:1rem;display:block;animation:bounceIn .6s cubic-bezier(.36,.07,.19,.97)}
+@keyframes bounceIn{0%{transform:scale(0)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+#card-download h3{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--branco);margin-bottom:.4rem}
+#card-download p{font-size:var(--fs-sm);color:var(--cinza);margin-bottom:1.5rem}
+.btn-download{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--verde),var(--verde-dark));color:#fff;border:none;border-radius:10px;padding:1rem 2.2rem;font-size:var(--fs-md);font-weight:700;cursor:pointer;transition:all .3s;font-family:'Raleway',sans-serif;text-decoration:none;animation:pulseV 3s infinite}
+.btn-download:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(46,204,113,.4)}
+@keyframes pulseV{0%,100%{box-shadow:0 0 0 0 rgba(46,204,113,.4)}50%{box-shadow:0 0 0 14px rgba(46,204,113,0)}}
+.btn-nova{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.07);color:var(--branco);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:.8rem 1.6rem;font-size:var(--fs-sm);font-weight:700;cursor:pointer;margin-top:.8rem;transition:all .2s;font-family:'Raleway',sans-serif}
+.btn-nova:hover{background:rgba(255,255,255,.12)}
+.download-meta{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;font-size:var(--fs-xs);color:var(--cinza)}
+
+/* ── SEM CRÉDITOS ── */
+#card-sem-creditos{display:none;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:20px;padding:2rem;text-align:center;margin-bottom:2rem}
+#card-sem-creditos h3{font-family:'Cinzel',serif;color:#f87171;margin-bottom:.5rem}
+#card-sem-creditos p{font-size:var(--fs-sm);color:var(--cinza);margin-bottom:1.2rem}
+.btn-recarregar{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--dourado),var(--ambar));color:var(--base);border:none;border-radius:10px;padding:.9rem 2rem;font-size:var(--fs-sm);font-weight:700;cursor:pointer;font-family:'Raleway',sans-serif;transition:all .2s}
+.btn-recarregar:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(201,168,76,.4)}
+
+/* ── HISTÓRICO ── */
+.historico-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;margin-top:2rem}
+.historico-header h2{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--branco)}
+.historico-vazio{text-align:center;padding:3rem 1rem;color:var(--cinza);font-size:var(--fs-sm)}
+.historico-vazio span{display:block;font-size:2rem;margin-bottom:.8rem}
+.hist-list{display:flex;flex-direction:column;gap:.7rem}
+.hist-item{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s}
+.hist-item:hover{border-color:rgba(107,33,168,.25)}
+.hist-icon{font-size:1.5rem;flex-shrink:0}
+.hist-info{flex:1;min-width:0}
+.hist-nome{font-size:var(--fs-sm);font-weight:700;color:var(--branco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.15rem}
+.hist-meta{font-size:.78rem;color:var(--cinza);display:flex;gap:.8rem;flex-wrap:wrap}
+.hist-status{font-size:.72rem;font-weight:700;padding:.2rem .65rem;border-radius:100px;flex-shrink:0}
+.hist-status.ok{background:rgba(46,204,113,.1);color:var(--verde);border:1px solid rgba(46,204,113,.2)}
+.hist-status.proc{background:rgba(107,33,168,.1);color:#C084FC;border:1px solid rgba(107,33,168,.2)}
+.hist-status.erro{background:rgba(239,68,68,.08);color:#f87171;border:1px solid rgba(239,68,68,.2)}
+.hist-dl{display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.15);border-radius:8px;color:var(--verde);text-decoration:none;font-size:1rem;transition:all .2s;flex-shrink:0}
+.hist-dl:hover{background:rgba(46,204,113,.15);transform:translateY(-1px)}
+
+/* ── MODAL ── */
+#modal-creditos{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+#modal-creditos.open{display:flex}
+.modal-card{background:#0D1220;border:1px solid rgba(107,33,168,.3);border-radius:20px;padding:2rem;max-width:600px;width:100%;position:relative;animation:slideIn .3s ease}
+.modal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violeta),var(--dourado))}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:none;color:var(--cinza);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:rgba(255,255,255,.14);color:var(--branco)}
+.modal-card h2{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--branco);margin-bottom:.4rem}
+.modal-card p{font-size:var(--fs-xs);color:var(--cinza);margin-bottom:1.5rem}
+.modal-plans{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+@media(max-width:500px){.modal-plans{grid-template-columns:1fr}}
+.mplan{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
+.mplan:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.04);transform:translateY(-2px)}
+.mplan.dest{border-color:var(--dourado);position:relative}
+.mplan.dest::before{content:'Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--dourado),var(--ambar));color:var(--base);font-size:.65rem;font-weight:700;padding:.15rem .7rem;border-radius:100px;font-family:'Cinzel',serif}
+.mplan-nome{font-size:.72rem;color:var(--cinza);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.mplan-preco{font-family:'Cinzel',serif;font-size:1.6rem;color:var(--branco);line-height:1;margin-bottom:.2rem}
+.mplan-cr{font-size:.8rem;color:var(--cinza);margin-bottom:.2rem}
+.mplan-bonus{font-size:.78rem;color:var(--dourado);font-weight:600;min-height:1em;margin-bottom:.9rem}
+.mplan-btn{width:100%;padding:.65rem;border-radius:8px;font-size:var(--fs-xs);font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:var(--branco);font-family:'Raleway',sans-serif;transition:all .2s}
+.mplan-btn:hover{background:rgba(255,255,255,.14)}
+.mplan.dest .mplan-btn{background:linear-gradient(135deg,var(--dourado),var(--ambar));color:var(--base);border:none}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:#1a2535;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.75rem 1.4rem;font-size:var(--fs-xs);color:var(--branco);z-index:300;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;display:flex;align-items:center;gap:.6rem;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.verde{border-color:rgba(46,204,113,.3);background:rgba(26,138,74,.15)}
+#toast.erro{border-color:rgba(239,68,68,.3);background:rgba(127,29,29,.15)}
+</style>
+</head>
+<body>
+
+<!-- Fundo radiônico -->
+<div class="bg-radionics">
+  <div class="bg-aura"></div>
+  <svg class="bg-turbilhao" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="white" stroke-width="1">
+      <path d="M250,250 C250,150 350,100 400,200 C450,300 350,420 250,400 C150,380 80,280 120,180 C160,80 300,60 380,150 C460,240 420,390 310,430 C200,470 80,380 70,260 C60,140 180,30 310,60 C440,90 500,240 460,360 C420,480 270,510 160,460 C50,410 20,260 80,150"/>
+      <path d="M250,250 C270,160 360,120 400,210 C440,300 360,410 260,395 C160,380 95,285 130,185 C165,85 295,65 370,155 C445,245 415,385 310,425 C205,465 90,378 82,262 C74,146 190,38 316,66 C442,94 498,236 460,352"/>
+    </g>
+  </svg>
+</div>
+
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-card">
+    <span class="login-logo"><span class="fala">Fala</span><span class="login-logo-dot"></span><span class="texto">Texto</span></span>
+    <h2>Acesse seu painel</h2>
+    <p>Entre com sua conta Google para acessar seus créditos e transcrições.</p>
+    <button class="btn-google" id="btn-login">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Entrar com Google
+    </button>
+  </div>
+  <a href="/" class="login-back">← Voltar para o site</a>
+</div>
+
+<!-- HEADER -->
+<header>
+  <a href="/" class="logo"><span class="fala">Fala</span><span class="logo-dot"></span><span class="texto">Texto</span></a>
+  <div class="header-right">
+    <div class="creditos-container">
+      <div class="creditos-badge" id="creditos-badge" title="Seus créditos">
+        <span>💎</span>
+        <span class="cr-num" id="cr-num">—</span>
+        <span class="cr-label">créditos</span>
+      </div>
+      <button class="btn-add-creditos" id="btn-add-creditos">
+        <span>💳</span> Adicionar créditos
+      </button>
+    </div>
+    <div class="user-menu">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="user-info">
+          <div class="user-name" id="user-name">Carregando...</div>
+          <div class="user-email" id="user-email"></div>
+        </div>
+        <button class="dd-item" id="dd-creditos">💎 Comprar créditos</button>
+        <button class="dd-item" id="dd-historico">📋 Histórico</button>
+        <button class="dd-item danger" id="dd-logout">↩ Sair</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div id="secao-upload">
+    <h1 class="upload-title">Transcrever áudio ou vídeo</h1>
+    <p class="upload-sub">Arraste o arquivo ou clique para selecionar. Sua transcrição ficará pronta em minutos.</p>
+    <div class="upload-zone" id="upload-zone">
+      <span class="upload-zone-icon">🎙️</span>
+      <h3>Arraste seu arquivo aqui</h3>
+      <p>ou <span>clique para selecionar</span></p>
+      <p class="upload-formats">MP3 · MP4 · WAV · M4A · MKV · MOV · AVI · FLAC · AAC · OGG · WMA · WMV</p>
+      <button class="btn-upload-select">📂 Selecionar arquivo</button>
+    </div>
+    <input type="file" id="file-input" accept=".mp3,.mp4,.wav,.m4a,.mkv,.mov,.avi,.flac,.aac,.ogg,.oga,.wma,.wmv,.amr,.awb">
+  </div>
+
+  <div id="card-sem-creditos">
+    <h3>⚠️ Créditos insuficientes</h3>
+    <p id="msg-sem-creditos">Você não tem créditos suficientes.</p>
+    <button class="btn-recarregar" id="btn-recarregar">💎 Recarregar créditos</button>
+  </div>
+
+  <!-- CARD ARQUIVO PRONTO PARA TRANSCREVER -->
+  <div id="card-pronto" style="display:none;background:var(--card);border:1px solid rgba(46,204,113,.2);border-radius:20px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--verde),var(--dourado))"></div>
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem">
+      <span style="font-size:2rem">✅</span>
+      <div>
+        <div style="font-weight:700;color:var(--branco);font-size:var(--fs-sm)" id="pronto-filename">arquivo.mp3</div>
+        <div style="font-size:var(--fs-xs);color:var(--cinza)">Arquivo enviado com sucesso · <span id="pronto-mins"></span> créditos serão usados</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:.8rem;flex-wrap:wrap">
+      <button id="btn-transcrever" style="display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--verde),var(--verde-dark));color:#fff;border:none;border-radius:10px;padding:1rem 2rem;font-size:var(--fs-md);font-weight:700;cursor:pointer;font-family:'Raleway',sans-serif;transition:all .3s;animation:pulseV 3s infinite">
+        🎙️ Transcrever agora
+      </button>
+      <button id="btn-cancelar-pronto" style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.07);color:var(--cinza);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:1rem 1.4rem;font-size:var(--fs-sm);font-weight:600;cursor:pointer;font-family:'Raleway',sans-serif;transition:all .2s">
+        ✕ Cancelar
+      </button>
+    </div>
+  </div>
+
+  <div id="card-processamento">
+    <div class="proc-header">
+      <span class="proc-icon" id="proc-icon">⚙️</span>
+      <div class="proc-info">
+        <div class="proc-filename" id="proc-filename">arquivo.mp3</div>
+        <div class="proc-status">Status: <span id="proc-status-txt">Iniciando...</span></div>
+      </div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-labels">
+        <span class="prog-pct" id="prog-pct">0%</span>
+        <span class="prog-tempo" id="prog-tempo">Calculando...</span>
+      </div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" id="prog-bar"></div></div>
+    </div>
+    <div class="proc-etapas">
+      <div class="etapa" id="etapa-1"><span class="etapa-icon">🎙️</span><div class="etapa-nome">Transcrição</div></div>
+      <div class="etapa" id="etapa-2"><span class="etapa-icon">🔧</span><div class="etapa-nome">Alinhamento</div></div>
+      <div class="etapa" id="etapa-3"><span class="etapa-icon">✍️</span><div class="etapa-nome">Correção IA</div></div>
+    </div>
+    <button class="btn-cancelar-proc" id="btn-cancelar-proc">✕ Cancelar transcrição</button>
+  </div>
+
+  <div id="card-download">
+    <span class="download-icon">✅</span>
+    <h3>Transcrição concluída!</h3>
+    <p id="download-info">Seu documento está pronto.</p>
+    <div><a id="btn-download" class="btn-download" href="#" download>⬇️ Baixar transcrição (.docx)</a></div>
+    <div><button class="btn-nova" id="btn-nova">🎙️ Nova transcrição</button></div>
+    <div class="download-meta">
+      <span id="dl-creditos-usados"></span>
+      <span id="dl-duracao"></span>
+    </div>
+  </div>
+
+  <div class="historico-header">
+    <h2>Histórico</h2>
+    <span style="font-size:var(--fs-xs);color:var(--cinza)" id="hist-count"></span>
+  </div>
+  <div class="hist-list" id="hist-list">
+    <div class="historico-vazio"><span>📭</span>Nenhuma transcrição ainda.</div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div id="modal-creditos">
+  <div class="modal-card">
+    <button class="modal-close" id="modal-close">✕</button>
+    <h2>💎 Recarregar créditos</h2>
+    <p>1 crédito = 1 minuto de áudio. Créditos nunca expiram.</p>
+    <div class="modal-plans">
+      <div class="mplan"><div class="mplan-nome">Básico</div><div class="mplan-preco">R$ 30</div><div class="mplan-cr">30 créditos</div><div class="mplan-bonus">&nbsp;</div><button class="mplan-btn" data-valor="30">Comprar</button></div>
+      <div class="mplan dest"><div class="mplan-nome">Recomendado</div><div class="mplan-preco">R$ 80</div><div class="mplan-cr">100 créditos</div><div class="mplan-bonus">+25% bônus</div><button class="mplan-btn" data-valor="80">Comprar</button></div>
+      <div class="mplan"><div class="mplan-nome">Profissional</div><div class="mplan-preco">R$ 150</div><div class="mplan-cr">220 créditos</div><div class="mplan-bonus">+47% bônus</div><button class="mplan-btn" data-valor="150">Comprar</button></div>
+      <div class="mplan"><div class="mplan-nome">Premium</div><div class="mplan-preco">R$ 300</div><div class="mplan-cr">450 créditos</div><div class="mplan-bonus">+50% bônus</div><button class="mplan-btn" data-valor="300">Comprar</button></div>
+      <div class="mplan" style="grid-column:1/-1"><div class="mplan-nome">Empresarial</div><div class="mplan-preco">R$ 2.500</div><div class="mplan-cr">4.000 créditos</div><div class="mplan-bonus">+60% bônus</div><button class="mplan-btn" data-valor="2500">Comprar</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { initializeFirestore, doc, onSnapshot, collection, query, where, orderBy, limit, getDocs, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { getStorage, ref, uploadBytesResumable } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js';
+
+const app = initializeApp({
+  apiKey: "AIzaSyBuFiUFG4Dv-LnNvUG6uuJasoEFfKil_Lk",
+  authDomain: "fala-texto-ad013.firebaseapp.com",
+  projectId: "fala-texto-ad013",
+  storageBucket: "fala-texto-ad013.firebasestorage.app",
+  messagingSenderId: "952419708835",
+  appId: "1:952419708835:web:f1bb7998f30ec943c77416"
+});
+
+const auth = getAuth(app);
+const db = initializeFirestore(app, {}, 'falatexto-db');
+const storage = getStorage(app);
+const fns = getFunctions(app, 'us-central1');
+
+let usuario = null;
+let creditos = 0;
+let unsubCreditos = null;
+let unsubJob = null;
+
+// ── TOAST ──
+let toastTimer;
+function toast(msg, tipo = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + tipo;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = '', 4000);
+}
+
+// ── AUTH ──
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    document.getElementById('tela-login').style.display = 'flex';
+    return;
+  }
+  usuario = user;
+  document.getElementById('tela-login').style.display = 'none';
+
+  // Cria documento no Firestore se for primeiro login
+  try {
+    const userRef = doc(db, 'usuarios', user.uid);
+    const userSnap = await getDoc(userRef);
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        creditos: 0,
+        email: user.email || '',
+        nome: user.displayName || '',
+        criadoEm: serverTimestamp()
+      });
+      console.log('✅ Novo usuário criado:', user.uid);
+    }
+  } catch(e) { console.error('Erro ao criar usuário:', e); }
+
+  // Avatar
+  const av = document.getElementById('user-avatar');
+  if (user.photoURL) {
+    const img = document.createElement('img');
+    img.src = user.photoURL;
+    av.innerHTML = '';
+    av.appendChild(img);
+  } else {
+    av.textContent = (user.displayName || '?')[0].toUpperCase();
+  }
+  document.getElementById('user-name').textContent = user.displayName || 'Usuário';
+  document.getElementById('user-email').textContent = user.email || '';
+
+  ouvirCreditos(user.uid);
+  carregarHistorico(user.uid);
+
+  if (new URLSearchParams(window.location.search).get('pagamento') === 'ok') {
+    toast('✅ Pagamento confirmado! Créditos adicionados.', 'verde');
+    history.replaceState({}, '', '/app/');
+  }
+});
+
+document.getElementById('btn-login').onclick = () => {
+  signInWithPopup(auth, new GoogleAuthProvider()).catch(e => {
+    console.error(e);
+    toast('❌ Erro ao entrar. Tente novamente.', 'erro');
+  });
+};
+
+document.getElementById('dd-logout').onclick = () => signOut(auth).then(() => location.href = '/');
+
+// ── DROPDOWN ──
+document.getElementById('user-avatar').onclick = () => document.getElementById('user-dropdown').classList.toggle('open');
+document.addEventListener('click', e => { if (!e.target.closest('.user-menu')) document.getElementById('user-dropdown').classList.remove('open'); });
+document.getElementById('dd-historico').onclick = () => {
+  document.getElementById('hist-list').scrollIntoView({behavior:'smooth'});
+  document.getElementById('user-dropdown').classList.remove('open');
+};
+
+// ── CRÉDITOS ──
+function ouvirCreditos(uid) {
+  if (unsubCreditos) unsubCreditos();
+  unsubCreditos = onSnapshot(doc(db, 'usuarios', uid), snap => {
+    creditos = snap.data()?.creditos || 0;
+    document.getElementById('cr-num').textContent = creditos;
+    document.getElementById('creditos-badge').classList.toggle('creditos-low', creditos < 10);
+  });
+}
+
+// ── MODAL ──
+function abrirModal() {
+  document.getElementById('modal-creditos').classList.add('open');
+  document.getElementById('user-dropdown').classList.remove('open');
+}
+document.getElementById('btn-add-creditos').onclick = abrirModal;
+document.getElementById('dd-creditos').onclick = abrirModal;
+document.getElementById('btn-recarregar').onclick = abrirModal;
+document.getElementById('modal-close').onclick = () => document.getElementById('modal-creditos').classList.remove('open');
+document.getElementById('modal-creditos').onclick = e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); };
+
+document.querySelectorAll('.mplan-btn').forEach(btn => {
+  btn.onclick = async () => {
+    if (!usuario) { toast('❌ Faça login antes de comprar.', 'erro'); return; }
+    try {
+      btn.textContent = 'Aguarde...';
+      btn.disabled = true;
+      // Força refresh do token
+      await usuario.getIdToken(true);
+      console.log('✅ UID:', usuario.uid);
+      // Usa httpsCallable com a instância correta do app
+      const criarPagamento = httpsCallable(fns, 'criarPagamento');
+      const result = await criarPagamento({ valor: Number(btn.dataset.valor) });
+      console.log('✅ Resultado:', result.data);
+      location.href = result.data.init_point;
+    } catch(e) {
+      console.error('❌ Erro:', e.code, e.message);
+      btn.textContent = 'Comprar';
+      btn.disabled = false;
+      toast('❌ Erro ao iniciar pagamento: ' + e.message, 'erro');
+    }
+  };
+});
+
+// ── UPLOAD ──
+const zone = document.getElementById('upload-zone');
+const fileInput = document.getElementById('file-input');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag'); if (e.dataTransfer.files[0]) processarArquivo(e.dataTransfer.files[0]); });
+zone.onclick = () => fileInput.click();
+document.querySelector('.btn-upload-select').onclick = e => { e.stopPropagation(); fileInput.click(); };
+fileInput.onchange = () => { if (fileInput.files[0]) processarArquivo(fileInput.files[0]); };
+
+async function processarArquivo(file) {
+  const mins = Math.ceil(file.size / (1024 * 1024));
+  if (creditos < mins) {
+    document.getElementById('msg-sem-creditos').textContent = `Este arquivo tem ~${mins} minutos e você tem ${creditos} crédito(s).`;
+    document.getElementById('card-sem-creditos').style.display = 'block';
+    return;
+  }
+  document.getElementById('card-sem-creditos').style.display = 'none';
+  document.getElementById('card-download').style.display = 'none';
+  document.getElementById('secao-upload').style.display = 'none';
+  document.getElementById('card-processamento').style.display = 'block';
+  document.getElementById('proc-filename').textContent = file.name;
+  atualizarProgresso(0, 'Enviando arquivo...', 1);
+
+  try {
+    const path = `uploads/${usuario.uid}/${Date.now()}_${file.name}`;
+    const task = uploadBytesResumable(ref(storage, path), file);
+    task.on('state_changed', s => {
+      const pct = Math.round(s.bytesTransferred/s.totalBytes*100);
+      atualizarProgresso(pct, `Enviando... ${pct}%`, 1);
+    });
+    await task;
+
+    // Upload concluído — mostrar botão Transcrever
+    document.getElementById('card-processamento').style.display = 'none';
+    document.getElementById('pronto-filename').textContent = file.name;
+    document.getElementById('pronto-mins').textContent = mins;
+    document.getElementById('card-pronto').style.display = 'block';
+
+    // Botão Transcrever
+    document.getElementById('btn-transcrever').onclick = async () => {
+      document.getElementById('card-pronto').style.display = 'none';
+      document.getElementById('card-processamento').style.display = 'block';
+      document.getElementById('proc-filename').textContent = file.name;
+      atualizarProgresso(0, 'Iniciando transcrição...', 1);
+      try {
+        const processarAudio = httpsCallable(fns, 'processarAudio', { timeout: 540000 });
+        const r = await processarAudio({ filePath: path, fileName: file.name, minutos: mins });
+        ouvirJob(r.data.jobId);
+      } catch(e) {
+        console.error(e);
+        toast('❌ Erro ao transcrever. Tente novamente.', 'erro');
+        resetar();
+      }
+    };
+
+    // Botão Cancelar
+    document.getElementById('btn-cancelar-pronto').onclick = () => {
+      document.getElementById('card-pronto').style.display = 'none';
+      document.getElementById('secao-upload').style.display = 'block';
+      fileInput.value = '';
+    };
+
+  } catch(e) {
+    console.error(e);
+    toast('❌ Erro ao enviar. Tente novamente.', 'erro');
+    resetar();
+  }
+}
+
+function ouvirJob(jobId) {
+  if (unsubJob) unsubJob();
+  unsubJob = onSnapshot(doc(db, 'jobs', jobId), snap => {
+    const d = snap.data(); if (!d) return;
+    atualizarProgresso(d.progresso || 0, d.statusMsg || 'Processando...', d.etapa || 1);
+    if (d.status === 'concluido') { unsubJob(); mostrarDownload(d); carregarHistorico(usuario.uid); }
+    else if (d.status === 'erro') { unsubJob(); toast('❌ Erro. Créditos estornados.', 'erro'); resetar(); }
+  });
+
+  // Botão cancelar
+  const btnCancelar = document.getElementById('btn-cancelar-proc');
+  btnCancelar.onclick = async () => {
+    if (!confirm('Tem certeza que deseja cancelar? O processamento será interrompido e os créditos não serão cobrados.')) return;
+    btnCancelar.textContent = 'Cancelando...';
+    btnCancelar.disabled = true;
+    if (unsubJob) { unsubJob(); unsubJob = null; }
+    try {
+      // Tenta cancelar o job no RunPod via Cloud Function
+      const cancelarFn = httpsCallable(fns, 'cancelarJob');
+      await cancelarFn({ jobId }).catch(() => {}); // ignora erro se função não existir
+    } catch(e) { /* silencioso */ }
+    toast('🛑 Transcrição cancelada.', '');
+    resetar();
+  };
+}
+
+function atualizarProgresso(pct, msg, etapa) {
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('proc-status-txt').textContent = msg;
+  const r = Math.round((100-pct)*0.8);
+  document.getElementById('prog-tempo').textContent = pct >= 100 ? 'Concluído!' : r > 60 ? `~${Math.round(r/60)}min` : `~${r}s`;
+  if (pct >= 100) document.getElementById('proc-icon').textContent = '✅';
+  for (let i=1;i<=3;i++) {
+    const el = document.getElementById(`etapa-${i}`);
+    el.className = 'etapa' + (i < etapa ? ' concluida' : i === etapa ? ' ativa' : '');
+  }
+}
+
+function mostrarDownload(d) {
+  document.getElementById('card-processamento').style.display = 'none';
+  document.getElementById('card-download').style.display = 'block';
+  document.getElementById('download-info').textContent = `"${d.nomeArquivo || 'transcrição'}" processada!`;
+  const btn = document.getElementById('btn-download');
+  btn.href = d.docxUrl || '#';
+  btn.download = (d.nomeArquivo || 'transcricao') + '_transcrito.docx';
+  if (d.creditosUsados) document.getElementById('dl-creditos-usados').textContent = `💎 ${d.creditosUsados} créditos`;
+  if (d.duracaoMin) document.getElementById('dl-duracao').textContent = `⏱️ ${d.duracaoMin}min`;
+  toast('✅ Pronto! Faça o download.', 'verde');
+}
+
+document.getElementById('btn-nova').onclick = resetar;
+function resetar() {
+  if (unsubJob) { unsubJob(); unsubJob = null; }
+  document.getElementById('card-processamento').style.display = 'none';
+  document.getElementById('card-download').style.display = 'none';
+  document.getElementById('card-pronto').style.display = 'none';
+  document.getElementById('secao-upload').style.display = 'block';
+  const btnCancelar = document.getElementById('btn-cancelar-proc');
+  btnCancelar.textContent = '✕ Cancelar transcrição';
+  btnCancelar.disabled = false;
+  fileInput.value = '';
+}
+
+// ── HISTÓRICO ──
+async function carregarHistorico(uid) {
+  try {
+    const q = query(collection(db,'jobs'), where('uid','==',uid), orderBy('criadoEm','desc'), limit(20));
+    const snap = await getDocs(q);
+    const lista = document.getElementById('hist-list');
+    document.getElementById('hist-count').textContent = snap.empty ? '' : `${snap.size} transcrição(ões)`;
+    if (snap.empty) { lista.innerHTML = '<div class="historico-vazio"><span>📭</span>Nenhuma transcrição ainda.</div>'; return; }
+    lista.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      const dt = data.criadoEm?.toDate?.() || new Date();
+      const s = {concluido:{c:'ok',t:'Concluído'},processando:{c:'proc',t:'Processando'},erro:{c:'erro',t:'Erro'}}[data.status] || {c:'proc',t:'Processando'};
+      lista.innerHTML += `<div class="hist-item">
+        <span class="hist-icon">${data.tipo==='video'?'🎬':'🎙️'}</span>
+        <div class="hist-info">
+          <div class="hist-nome">${data.nomeArquivo||'Arquivo'}</div>
+          <div class="hist-meta">
+            <span>📅 ${dt.toLocaleDateString('pt-BR')} ${dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</span>
+            ${data.duracaoMin?`<span>⏱️ ${data.duracaoMin}min</span>`:''}
+            ${data.creditosUsados?`<span>💎 ${data.creditosUsados}</span>`:''}
+          </div>
+        </div>
+        <span class="hist-status ${s.c}">${s.t}</span>
+        ${data.docxUrl?`<a class="hist-dl" href="${data.docxUrl}" download>⬇️</a>`:'<div class="hist-dl" style="opacity:.3">⬇️</div>'}
+      </div>`;
+    });
+  } catch(e) { console.error('Histórico:', e); }
+}
+</script>
+</body>
+</html>
